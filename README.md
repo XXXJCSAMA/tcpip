@@ -1,73 +1,67 @@
-# 项目说明
-本仓库放置了《从0写TCP/IP协议栈》课程源码。本课程目标是展示如何从0行代码开始，编写一个小型的、移植性强的TCP/IP协议栈。
+# Project Description
+This warehouse has placed the "Write TCP/IP protocol stack from 0" course source code. The goal of this course is to show how to write a small, portable TCP/IP stack starting with 0 lines of code.
 
-**项目包含约10000+行代码，10余种协议、20余种socket接口、10个网络应用程序**
+** Project contains about 10,000 + lines of code, more than 10 protocols, more than 20 socket interfaces, 10 network applications **
 
-**该协议栈配套相应的视频课程，请扫描仓库下的相应二维码即可**
+# Protocol stack features
+Platform support
+* Support development and learning on Windows, Linux and Mac platforms
+* Using the C99 standard C language, does not rely on a specific compiler
+* Code portability is strong and can be easily ported to x86 and embedded platforms such as ARM
+* Only basic semaphore, mutex, and time acquisition interfaces are required
+Hardware support
+* Does not limit the specific network interface type, can support other interface devices outside the Ethernet
+* Support to add multiple network interfaces (nics), IP packets will automatically be sent to the correct interface according to the routing table
+* Support loopback interface, to achieve the local packet self-collection
+Functional characteristics
+* Standard Socket interface:
+* Interface: socket, bind, connnect, close
+* Interface: sendto, recvfrom, send, recv, read, write, setsockopt
+* Specific type
+* SOCK_RAW: Allows applications to send and receive IP packets
+* SOCK_DGRAM based: allows applications to send and receive
+* Multithreading
+* Supports multi-threaded operation of the same socket interface, that is, allows different threads to read and write at the same time
+* Support the creation of any number of applications at the same time, whether client or server
+* Data packet
+* The packet is organized into multiple blocks of links to improve memory utilization efficiency
+Protocol support
+* Ethernet protocol: Support Ethernet packet sending and receiving and packet processing
+* Address resolution Protocol ARP
+* Complete support for ARP query and response processes
+* Support no return (free) ARP packet sending
+* Use a configurable ARP cache to improve query efficiency
+* Automatically clean up invalid cache entries by updating ARP cache periodically for a certain period of time
+* The input ARP and IP packets can be used to update the cache, reducing network traffic
+* IPv4 Protocol
+* Support basic IP packet sending and receiving, checksum calculation
+* Support IP packet fragmentation and reassembly, reassembly timeout processing
+* Built-in routing table for Internet access via router
+* ICMPv4 protocol
+* Supports response to incoming echo requests (i.e. can be pinged by others)
+* Provides information that the destination port is unreachable to notify other machines of an access error
+* UDP Protocol
+* Basic UDP input/output processing to correctly pass input packets to the application
+* TCP Protocol
+* Support TCP state machine switching
+* Timer based data sending timeout retransmission
+* Calculate RTO adaptively according to the RTT situation to reduce data retransmission operations
+* Fast retransmission based on repeated ACK
+* Zero window with TCP persistent timer
+* Application Layer protocol:
+* Network Time Service NTP
+■ The client can query the NTP server to obtain the current time
+* Simple File Transfer Protocol TFTP
+■ Implement TFTP client: you can upload and download files from the server
+■ Implement TFTP server: allows clients to upload and download files to the server
+■ Supports TFTP request handling with options
+■ Automatic retransmission when data packet is lost
+* Hypertext Transfer Protocol HTTP:
+■ Implementation of multi-threaded version of the HTTP server, can provide the client with web access functions
+* Domain Name Resolution Protocol DNS
+■ Support domain name resolution and IP address conversion
+■ Support for adding multiple DNS servers
+■ Cache DNS query results, automatically deleted after timeout
+■ Allows multiple tasks to be queried simultaneously
+* DHCP Protocol (under development)
 
-课程配套的文档、工具软件等，请访问我的知识库从中获取：https://www.yuque.com/lishutong-docs/diytcpip
-
-学习中有任何问题，可通过知识库找到我，获取相应的联系方式。
-
-# 协议栈特点
-平台支持
-* 支持在Windows、Linux、Mac平台上开发学习
-* 采用C99标准的C语言，不依赖特定的编译器
-* 代码移植性强，可容易移植到x86和嵌入式平台，如ARM等
-* 只需要操作系统提供基本的信号量、互斥锁和时间获取接口即可
-硬件支持
-* 不限定具体的网络接口类型，可支持以太网外的其它接口设备
-* 支持添加多个网络接口（网卡），IP数据包会自动根据路由表发到正确的接口
-* 支持回环接口，实现本机的数据包自发自收
-功能特性
-* 标准Socket接口：
-  * 接口：socket、bind、connnect、close
-  * 接口：sendto、recvfrom、send、recv、read、write、setsockopt
-* 具体类型
-  * 基于SOCK_RAW：允许应用程序收发IP数据包
-  * 基于SOCK_DGRAM：允许应用程序收发UDP数据包
-  * 基于SOCK_STREAM（开发中）：允许应用程序收发UDP数据包
-* 多线程
-  * 支持多线程操作同一socket接口，即允许不同线程进行同时读写
-  * 支持同时创建任意多个应用，无论是客户端还是服务器
-* 数据包
-  * 将数据包组织多块链接的方式，提升内存的利用效率
-协议支持
-* 以太网协议：支持以太网数据包的收发和数据包的处理
-* 地址解析协议ARP
-  * 完整支持ARP的查询和响应过程
-  * 支持无回报（免费）ARP包的发送
-  * 使用可配置的大小的ARP缓存，可提升查询效率
-  * 使用定时期周期性地更新ARP缓存，自动清理无效的缓存项
-  * 可使用输入的ARP包和IP包进行缓存的更新，减少网络通信量
-* IPv4协议
-  * 支持基本的IP数据包的收发、校验和的计算
-  * 支持IP数据包的分片与重组、重组超时处理
-  * 内置路由表，从而可以通过路由器上网
-* ICMPv4协议
-  * 支持对输入的echo请求进行响应（即可以让别人ping自己）
-  * 提供发送目的端口不可达的信息，以便通知其它机器访问错误
-* UDP协议
-  * 基本的UDP输入输出处理，将输入包正确传递给应用程序
-* TCP协议
-  * 支持TCP状态机切换
-  * 基于计时器的数据发送超时重传
-  * 根据RTT情况自适应计算RTO，减少数据重发操作
-  * 基于重复ACK的快速重传
-  * 零窗口与TCP持续计时器
-* 应用层协议：
-  * 网络时间服务NTP
-    ■ 实现了客户端，可以查询NTP服务器获取当前时间
-  * 简单文件传输协议TFTP
-    ■ 实现TFTP客户端：可以从服务器端上传和下载文件
-    ■ 实现TFTP服务器：允许客户端向服务器上传和下载文件
-    ■ 支持带选项的TFTP请求处理
-    ■ 数据包丢失时可自动重发
-  * 超文本传输协议HTTP：
-    ■ 实现多线程版本的HTTP服务器，可以为客户端提供网页访问功能
-  * 域名解析协议DNS
-    ■ 支持域名解析，转换成IP地址
-    ■ 支持添加多个DNS服务器
-    ■ 缓存DNS查询结果，超时自动删除
-    ■ 允许多个任务同时进行查询
-  * DHCP协议（开发中）

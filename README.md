@@ -1,8 +1,3 @@
-# Project Description
-This warehouse has placed the "Write TCP/IP protocol stack from 0" course source code. The goal of this course is to show how to write a small, portable TCP/IP stack starting with 0 lines of code.
-
-** Project contains about 10,000 + lines of code, more than 10 protocols, more than 20 socket interfaces, 10 network applications **
-
 # Protocol stack features
 Platform support
 * Support development and learning on Windows, Linux and Mac platforms
